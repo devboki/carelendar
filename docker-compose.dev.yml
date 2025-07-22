@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: carelendar
+      POSTGRES_USER: carelendar_user
+      POSTGRES_PASSWORD: carelendar
+    volumes:
+      - ./carelendar-backend/src:/app/src
+      - ./carelendar-backend/build.gradle:/app/build.gradle
+      - ./carelendar-backend/settings.gradle:/app/settings.gradle
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - carelendar-net
+
+  backend:
+    build: ./carelendar-backend
+    container_name: carelendar_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/carelendar
+      SPRING_DATASOURCE_USERNAME: carelendar_user
+      SPRING_DATASOURCE_PASSWORD: carelendar
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - carelendar-net
+
+  frontend:
+    build: ./carelendar-frontend
+    container_name: carelendar_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - carelendar-net
+
+volumes:
+  postgres-data:
+
+networks:
+  carelendar-net:

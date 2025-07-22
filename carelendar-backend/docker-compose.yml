@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    container_name: carelendar_db
+    environment:
+      POSTGRES_DB: carelendar
+      POSTGRES_USER: carelendar_user
+      POSTGRES_PASSWORD: carelendar
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: carelendar_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/carelendar
+      SPRING_DATASOURCE_USERNAME: carelendar
+      SPRING_DATASOURCE_PASSWORD: carelendar
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: carelendar_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

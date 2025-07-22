@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/carelendar
+    username: carelendar_user
+    password: carelendar
+    driver-class-name: org.postgresql.Driver
+
+  batch: # spring-boot-starter-batch가 들어 있어 Batch AutoConfig가 강제로 동작 → DataSource 검사 단계에서 실패하므로 batch 자동구성 false
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # 개발 중에는 update, 운영 시에는 validate 또는 none 추천
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_scheme: carelendar
+    show-sql: true
+    format_sql: true
+
+  springdoc:
+    api-docs:
+      enabled: true
+    swagger-ui:
+      enabled: true
+
+  # 로컬 개발 시 포트 변경 가능
+  server:
+    port: 8080

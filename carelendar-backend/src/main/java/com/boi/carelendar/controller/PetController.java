@@ -1,8 +1,17 @@
 package com.boi.carelendar.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.boi.carelendar.dto.PetRequest;
+import com.boi.carelendar.dto.PetResponse;
+import com.boi.carelendar.repository.ScheduleRepository;
+import com.boi.carelendar.service.PetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,46 +26,43 @@ import com.boi.carelendar.entity.Pet;
 import com.boi.carelendar.repository.PetRepository;
 
 @RestController
-@RequestMapping("/api/pets")
+@RequestMapping("/pets")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class PetController {
 
+    private final PetService petService;
     private final PetRepository petRepository;
-
-    public PetController(PetRepository petRepository) {
-        this.petRepository = petRepository;
-    }
+    private final ScheduleRepository scheduleRepository;
 
     @GetMapping
-    public List<Pet> getAllPets() {
-        return petRepository.findAll();
+    public List<PetResponse> getAllPets() {
+        List<Pet> results = petRepository.findAll();
+        return results.stream().map(PetResponse::new).collect(Collectors.toList());
     }
     
-    @PostMapping
-    public ResponseEntity<List<Pet>> createPets(@RequestBody List<Pet> pets) {
-    	pets.forEach(pet -> {
-            System.out.println(">> Pet Name: " + pet.getName() + ", Species: " + pet.getSpecies());
-        });
-    	
-        List<Pet> savedPets = petRepository.saveAll(pets);
-        return ResponseEntity.ok(savedPets);
+    @PostMapping("/add")
+    @Transactional
+    public List<PetResponse> createPets(@RequestBody PetRequest request) {
+        Pet pet = new Pet();
+        pet.setName(request.getName());
+        pet.setSpecies(request.getSpecies());
+        petService.savePet(pet);
+
+        return getAllPets();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
-    	System.out.println("DELETE endpoint hit for id: " + id);
-    	
-    	//있는지 확인
-        if (!petRepository.existsById(id)) {
-        	System.out.println("Pet not found for id: " + id);
-            return ResponseEntity.notFound().build(); // 없으면 404 반환
+    @Transactional
+    public List<PetResponse> deletePet(@PathVariable Long id) {
+        if (petRepository.existsById(id)) {
+            scheduleRepository.deleteByPetId(id);
+            petRepository.deleteById(id);
         }
-        
-        System.out.println("Pet deleted for id: " + id);
-        petRepository.deleteById(id);
-        return ResponseEntity.noContent().build(); // 삭제 성공 시 204 반환
+        return getAllPets();
     }
-    
+
+
     // Update API: 특정 id의 Pet 정보 갱신 (전체 필드 업데이트)
     @PutMapping("/{id}")
     public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody Pet petDetails) {

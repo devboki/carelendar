@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/schedules")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     private final ScheduleRepository scheduleRepository;

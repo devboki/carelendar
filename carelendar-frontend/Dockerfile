@@ -16,6 +16,7 @@ FROM nginx:1.25-alpine
 
 # 빌드 결과물을 Nginx 정적 루트로 복사
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # (선택) Nginx 커스텀 설정이 있다면 여기에 복사
 # COPY nginx.conf /etc/nginx/nginx.conf

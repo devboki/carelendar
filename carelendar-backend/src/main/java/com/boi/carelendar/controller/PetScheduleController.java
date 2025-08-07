@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api/pets")
+@RequestMapping("/schedule")
 public class PetScheduleController {
 
     private final ScheduleRepository scheduleRepository;

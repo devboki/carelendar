@@ -18,6 +18,7 @@ function AddSchedule({ pet, onScheduleAdded }: AddScheduleProps) {
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+  const url = `import.meta.env.VITE_API_BASE_URL/pets`;
 
   const submitSchedule = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ function AddSchedule({ pet, onScheduleAdded }: AddScheduleProps) {
     };
 
     axios
-      .post(`http://localhost:8080/api/schedules/${pet.id}`, scheduleData, {
+      .post(`${url}/${pet.id}`, scheduleData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -47,10 +48,10 @@ function AddSchedule({ pet, onScheduleAdded }: AddScheduleProps) {
 
   return (
     <div style={{ border: '1px solid #ccc', marginTop: '8px', padding: '8px' }}>
-      <h4>일정 추가 (Pet: {pet.name})</h4>
+      <h4>일정 추가 (이름: {pet.name})</h4>
       <form onSubmit={submitSchedule}>
         <div>
-          <label>제목: </label>
+          <label>일정: </label>
           <input
             type="text"
             value={title}
@@ -59,7 +60,7 @@ function AddSchedule({ pet, onScheduleAdded }: AddScheduleProps) {
           />
         </div>
         <div>
-          <label>설명: </label>
+          <label>메모: </label>
           <input
             type="text"
             value={description}

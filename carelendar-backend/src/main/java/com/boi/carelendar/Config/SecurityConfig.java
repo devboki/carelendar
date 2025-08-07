@@ -1,4 +1,4 @@
-package com.carelendar.backend.config;
+package com.boi.carelendar.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +19,9 @@ public class SecurityConfig {
                 .cors(withDefaults()) // CORS 자동 등록 (중요!)
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
-                        )
-                );
+                        );
 
         return http.build();
     }

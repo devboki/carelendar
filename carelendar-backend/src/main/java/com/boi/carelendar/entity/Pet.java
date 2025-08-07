@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.google.firebase.database.annotations.NotNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,11 +22,14 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_seq_gen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "pet_seq_gen")
     @SequenceGenerator(name = "pet_seq_gen", sequenceName = "PET_SEQ", allocationSize = 1)
     private Long id;
-    
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String species;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)

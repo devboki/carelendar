@@ -40,8 +40,8 @@ function MyCalendar({ refreshKey, setRefreshTrigger, petId }: MyCalendarProps) {
         }
 
         const url = petId
-          ? `/api/pets/${petId}/schedules` 
-          : `/api/schedules`;              
+          ? `/pets/${petId}/schedules` 
+          : `/schedules`;              
         const response = await axios.get<ScheduleEvent[]>(url);
         setEvents(response.data);
       } catch (error) {
@@ -82,9 +82,9 @@ function MyCalendar({ refreshKey, setRefreshTrigger, petId }: MyCalendarProps) {
   const handleSubmit = async (event: ScheduleEvent) => {
     try {
       if (isEditMode && event.id) {
-        await axios.put(`/api/schedules/${event.id}`, event);
+        await axios.put(`/schedules/${event.id}`, event);
       } else {
-        await axios.post(`/api/schedules`, event);
+        await axios.post(`/schedules`, event);
       }
       setIsModalOpen(false);
       setRefreshTrigger(prev => prev + 1);
@@ -95,7 +95,7 @@ function MyCalendar({ refreshKey, setRefreshTrigger, petId }: MyCalendarProps) {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`/api/schedules/${id}`);
+      await axios.delete(`/schedules/${id}`);
       setIsModalOpen(false);
       setRefreshTrigger(prev => prev + 1);
     } catch (error) {

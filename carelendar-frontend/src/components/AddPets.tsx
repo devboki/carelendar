@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
-
+//import axios from 'axios';
+import {http} from '../lib/http'
 
 interface AddPetsProps {
   onPetAdded: () => void;
@@ -17,7 +17,7 @@ function AddPets({ onPetAdded }: AddPetsProps) {
 
     const petData = { name, species };
 
-    axios
+    http//axios
       .post(`${url}/add`, petData, {
         headers: {
           'Content-Type': 'application/json',

@@ -10,7 +10,6 @@ import com.boi.carelendar.repository.ScheduleRepository;
 import com.boi.carelendar.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +37,10 @@ public class PetController {
     @GetMapping
     public List<PetResponse> getAllPets() {
         List<Pet> results = petRepository.findAll();
-        return results.stream().map(PetResponse::new).collect(Collectors.toList());
+
+        return
+                results.size() == 0 ? new ArrayList<>() :
+                        results.stream().map(PetResponse::new).collect(Collectors.toList());
     }
     
     @PostMapping("/add")

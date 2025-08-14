@@ -41,6 +41,6 @@ volumes:
   postgres-data:
 
 networks:
-  rallyon-net:
+  carelendar-net:
     driver: bridge
 

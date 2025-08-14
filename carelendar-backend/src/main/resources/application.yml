@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # 개발 중에는 update, 운영 시에는 validate 또는 none 추천
+      ddl-auto: create  # 개발 중에는 update, 운영 시에는 validate 또는 none 추천
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -30,3 +30,9 @@ spring:
   # 로컬 개발 시 포트 변경 가능
   server:
     port: 8080
+
+app:
+  jwt:
+    secret: "thisisaverysecuresecretkeystring123456"
+    issuer: "carelendar-backend"
+    access-token-ttl: 990s  #15분

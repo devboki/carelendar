@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navigate} from "react-router-dom";
 
 import MyCalendar from './components/MyCalendar';
 import PetPage from './pages/PetPage';
+import Login from './pages/Login';
 import NavBar from './components/NavBar/NavBar';
 
 function App(): React.ReactElement {
@@ -19,7 +21,7 @@ function App(): React.ReactElement {
       <NavBar />
       <Routes>
         <Route
-          path="/"
+          path="/schedules"
           element={
             <MyCalendar
               refreshKey={refreshTrigger}
@@ -34,6 +36,8 @@ function App(): React.ReactElement {
             <PetPage onScheduleUpdated={handleScheduleUpdated} />
           }
         />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
